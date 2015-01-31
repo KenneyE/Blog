@@ -6,13 +6,13 @@
     <atom:link href="http://www.erickenney.io/Blog//feed.xml" rel="self" type="application/rss+xml" />
     <description></description>
     <language>en-us</language>
-    <pubDate>Sat, 31 Jan 2015 03:23:47 +0000</pubDate>
-    <lastBuildDate>Sat, 31 Jan 2015 03:23:47 +0000</lastBuildDate>
+    <pubDate>Sat, 31 Jan 2015 20:04:35 +0000</pubDate>
+    <lastBuildDate>Sat, 31 Jan 2015 20:04:35 +0000</lastBuildDate>
 
     
     
     <item>
-      <title>CodeCatatlyst promise-as3</title>
+      <title>CodeCatatlyst promise-as3 Library</title>
       <link>http://www.erickenney.io/Blog//2014/01/30/promise-as3/</link>
       <pubDate>Thu, 30 Jan 2014 00:00:00 +0000</pubDate>
       <author></author>
@@ -39,14 +39,13 @@ var promise : Promise = deferred.promise;
 
 &lt;p&gt;In the new JS implementation of promises, the promise constructor takes a function as a parameter. That function itself takes fulfill and reject functions as arguments. In AS3, it would look something like this:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;public function doSomethingAsync(url) {
-  var promise : Promise = new Promise( function (fulfill, reject) {
-    setTimeout(function () {
-      reject( new Error(&#39;Timeout&#39; ));
-    }, 10000);
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-as3&quot; data-lang=&quot;as3&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function &lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;doSomethingAsync&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;promise&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Promise&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Promise&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fulfill&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;reject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;setTimeout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;reject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Error&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Timeout&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;},&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10000&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;This is NOT how it is done with the promise-as3 library.&lt;/p&gt;
 
@@ -57,5 +56,5 @@ var promise : Promise = deferred.promise;
     
     
 
-  </channel> 
+  </channel>
 </rss>
