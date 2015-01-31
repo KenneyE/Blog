@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title></title>
-    <link>http://www.erickenney.io</link>
-    <atom:link href="http://www.erickenney.io/feed.xml" rel="self" type="application/rss+xml" />
+    <link>http://www.erickenney.io/Blog</link>
+    <atom:link href="http://www.erickenney.io/Blog/feed.xml" rel="self" type="application/rss+xml" />
     <description></description>
     <language>en-us</language>
-    <pubDate>Sat, 31 Jan 2015 00:54:07 +0000</pubDate>
-    <lastBuildDate>Sat, 31 Jan 2015 00:54:07 +0000</lastBuildDate>
+    <pubDate>Sat, 31 Jan 2015 01:23:23 +0000</pubDate>
+    <lastBuildDate>Sat, 31 Jan 2015 01:23:23 +0000</lastBuildDate>
 
     
     
     <item>
       <title>CodeCatatlyst promise-as3</title>
-      <link>http://www.erickenney.io/2014/01/30/promise-as3/</link>
+      <link>http://www.erickenney.io/Blog/2014/01/30/promise-as3/</link>
       <pubDate>Thu, 30 Jan 2014 00:00:00 +0000</pubDate>
       <author></author>
-      <guid>http://www.erickenney.io/2014/01/30/promise-as3</guid>
+      <guid>http://www.erickenney.io/Blog/2014/01/30/promise-as3</guid>
       <description>&lt;h2 id=&quot;codecatalysts-promise-as3-help-i-wish-id-had&quot;&gt;CodeCatalyst’s promise-as3 Help I Wish I’d Had&lt;/h2&gt;
 &lt;p&gt;For a project at work recently, we found the need to adapt a promise-driven Javascript file into AS3. After a little bit of research we settled on CodeCatalyst’s promise-as3 library. I say little bit of research because there’s really not very many libraries to look into. And the ones that do exist have little to no documentation. Because of that, I decided to put together what I’ve found for my own and others’ benefit.&lt;/p&gt;
 
@@ -24,9 +24,8 @@
 
 &lt;p&gt;The first thing you will obviously need to do is download the library from github.com/CodeCatalyst/promise-as3 and put it in some lib directory in your flash project. Then import the Deferred and Promise classes like so:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;import com.codecatalyst.promise.Deferred;
-import com.codecatalyst.promise.Promise;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-as3&quot; data-lang=&quot;as3&quot;&gt;&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;com.codecatalyst.promise.Deferred&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;com.codecatalyst.promise.Promise&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;One thing to note about promise-as3’s implementation of promises, is that you need to instantiate a Deferred object from which you will pull a Promise object.&lt;/p&gt;
 

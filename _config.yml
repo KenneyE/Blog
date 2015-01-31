@@ -4,40 +4,40 @@ inc:
   subtitle:     "Things I Learned That I'm Writing Down So I Don't Forget"
   cover_image:  blog-cover.jpg
   logo:         logo.png
-  
+
   # Company information
   company:      Eric Kenney
-  url:          http://www.erickenney.io
-  gplus:        '101183822199340201470'
+  url:          http://www.erickenney.io/Blog
+  gplus:
   about_link:   https://www.erickenney.io/about/
-  
+
   # Product Information
-  
+
   # Comments
   disqus:
     # Eg. "exampleblog" Set to false to disable comments
     shortname:  kenneye
-  
+
   # Sharing settings
   sharing:
     twitter:    false
     facebook:   false
     gplus:      false
     hn:         false
-    
-  
- # Analytics     
+
+
+ # Analytics
   analytics:
     google: true # Add tracking code in _includes/_google-analytics.html
-      
-      
+
+
   # Google Fonts
   # eg. 'Droid+Sans:400,700|Droid+Serif:400,700'
   google_font: 'Droid+Sans:400,700'
-  
+
   # Setup your fonts, colors etc at _assets/stylesheets/main.scss
 
-url:         http://www.erickenney.io
+url:         http://www.erickenney.io/Blog
 source:      .
 destination: ./_site
 plugins:     ./_plugins
@@ -50,7 +50,7 @@ timezone:    nil
 future:      false
 show_drafts: nil
 limit_posts: 0
-pygments:    true
+highlighter: pygments
 
 relative_permalinks: true
 
