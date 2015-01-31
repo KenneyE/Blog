@@ -3,17 +3,17 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CodeCatatlyst promise-as3 &mdash; Kenney Monthly</title>
+    <title>CodeCatatlyst promise-as3 Library &mdash; Kenney Monthly</title>
     <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="/Blog/assets/main.css">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
     <link rel="apple-touch-icon" href="/images/logo.png"/>
     <link href="/feed.xml" rel="alternate" type="application/rss+xml" title="Kenney Monthly" />
-    <meta name="title" content="CodeCatatlyst promise-as3 ">
+    <meta name="title" content="CodeCatatlyst promise-as3 Library ">
     <link rel="canonical" href="http://www.erickenney.io/Blog//2014/01/30/promise-as3/">
     
     
-    <meta property="og:title" content="CodeCatatlyst promise-as3 "/>
+    <meta property="og:title" content="CodeCatatlyst promise-as3 Library "/>
     <meta property="og:url" content="http://www.erickenney.io/Blog//2014/01/30/promise-as3/"/>
     
     <meta property="og:image" content="http://www.erickenney.io/Blog//images/blog-cover.jpg"/>
@@ -45,7 +45,7 @@
 
 <div class="article-cover">
     <div>
-        <img src="/images/blog-cover.jpg" class="image">
+        <img src="/Blog/images/blog-cover.jpg" class="image">
     </div>
 </div>
 
@@ -57,7 +57,7 @@
                 By <address><a rel="author" href="" title="Eric Kenney" target="_blank">Eric Kenney</a></address> &mdash;
                 <time pubdate datetime="2014-30-January" title="January 30, 2014">January 30, 2014</time>
             </div>
-            <h1 class="title">CodeCatatlyst promise-as3</h1>
+            <h1 class="title">CodeCatatlyst promise-as3 Library</h1>
             <h2 class="subtitle">The tutorial I wish I'd had</h2>
         </header>
 
@@ -84,14 +84,13 @@ var promise : Promise = deferred.promise;
 
 <p>In the new JS implementation of promises, the promise constructor takes a function as a parameter. That function itself takes fulfill and reject functions as arguments. In AS3, it would look something like this:</p>
 
-<pre><code>public function doSomethingAsync(url) {
-  var promise : Promise = new Promise( function (fulfill, reject) {
-    setTimeout(function () {
-      reject( new Error('Timeout' ));
-    }, 10000);
-  }
-}
-</code></pre>
+<div class="highlight"><pre><code class="language-as3" data-lang="as3"><span class="kd">public</span> <span class="kd">function </span><span class="nf">doSomethingAsync</span><span class="o">(</span><span class="err">url</span><span class="o">)</span> <span class="o">{</span>
+      <span class="kd">var</span> <span class="n">promise</span> <span class="p">:</span> <span class="kt">Promise</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">Promise</span><span class="o">(</span> <span class="kd">function</span> <span class="o">(</span><span class="n">fulfill</span><span class="o">,</span> <span class="n">reject</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">setTimeout</span><span class="o">(</span><span class="kd">function</span> <span class="o">()</span> <span class="o">{</span>
+          <span class="n">reject</span><span class="o">(</span> <span class="k">new</span> <span class="kt">Error</span><span class="o">(</span><span class="s1">&#39;Timeout&#39;</span> <span class="o">));</span>
+        <span class="o">},</span> <span class="mi">10000</span><span class="o">);</span>
+      <span class="o">}</span>
+    <span class="o">}</span></code></pre></div>
 
 <p>This is NOT how it is done with the promise-as3 library.</p>
 
@@ -103,7 +102,7 @@ var promise : Promise = deferred.promise;
 
         <footer>
             <address>
-               <img src="/images/ks.png">
+               <img src="/Blog/images/ks.png">
                 <p>Written by <strong><a rel="author" href="https://twitter.com/" title="" target="_blank">Eric Kenney</a></strong><br>
                 <span class="muted">Web Developer</span>
                 </p>
