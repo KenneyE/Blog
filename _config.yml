@@ -7,7 +7,7 @@ inc:
 
   # Company information
   company:      Eric Kenney
-  url:          http://www.erickenney.io/Blog
+  url:          http://www.erickenney.io
   gplus:
   about_link:   https://www.erickenney.io/about/
 
@@ -37,7 +37,7 @@ inc:
 
   # Setup your fonts, colors etc at _assets/stylesheets/main.scss
 
-url:         http://www.erickenney.io/Blog
+url:         http://www.erickenney.io
 source:      .
 destination: ./_site
 plugins:     ./_plugins
