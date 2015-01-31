@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeCatatlyst promise-as3 &mdash; Kenney Monthly</title>
+    <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="/images/logo.png"/>
+    <link href="/feed.xml" rel="alternate" type="application/rss+xml" title="Kenney Monthly" />
+    <meta name="title" content="CodeCatatlyst promise-as3 ">
+    <link rel="canonical" href="http://www.erickenney.io/Blog/2014/01/30/promise-as3/">
+    
+    
+    <meta property="og:title" content="CodeCatatlyst promise-as3 "/>
+    <meta property="og:url" content="http://www.erickenney.io/Blog/2014/01/30/promise-as3/"/>
+    
+    <meta property="og:image" content="http://www.erickenney.io/Blog/images/blog-cover.jpg"/>
+    
+    <meta property="og:image" content="http://www.erickenney.io/Blog/images/logo.png"/>
+    
+    
+    <meta property="og:description" content="A quick overview of using the CodeCatalyst promise-as3 library and all of the tips I wish I'd had when I picked it up."/>
+    <meta name="description" content="A quick overview of using the CodeCatalyst promise-as3 library and all of the tips I wish I'd had when I picked it up."/>
+    
+    <meta property="og:site_name" content="Kenney Monthly">
+</head>
+<body>
+
+<section class="site-nav">
+    <header>
+        <nav id="navigation">
+            <a class="brand" href="/">
+                <img src="/images/logo.png" alt="Inc">
+            </a>
+            <a href="/" class="home">Blog</a>
+            
+
+        </nav>
+        
+    </header>
+</section>
+
+
+<div class="article-cover">
+    <div>
+        <img src="/images/blog-cover.jpg" class="image">
+    </div>
+</div>
+
+<article>
+
+    <div class="container">
+        <header>
+            <div class="meta">
+                By <address><a rel="author" href="" title="Eric Kenney" target="_blank">Eric Kenney</a></address> &mdash;
+                <time pubdate datetime="2014-30-January" title="January 30, 2014">January 30, 2014</time>
+            </div>
+            <h1 class="title">CodeCatatlyst promise-as3</h1>
+            <h2 class="subtitle">The tutorial I wish I'd had</h2>
+        </header>
+
+        <section>
+            <h2 id="codecatalysts-promise-as3-help-i-wish-id-had">CodeCatalyst’s promise-as3 Help I Wish I’d Had</h2>
+<p>For a project at work recently, we found the need to adapt a promise-driven Javascript file into AS3. After a little bit of research we settled on CodeCatalyst’s promise-as3 library. I say little bit of research because there’s really not very many libraries to look into. And the ones that do exist have little to no documentation. Because of that, I decided to put together what I’ve found for my own and others’ benefit.</p>
+
+<h3 id="starting-with-promise-as3">Starting with promise-as3</h3>
+
+<p>The first thing you will obviously need to do is download the library from github.com/CodeCatalyst/promise-as3 and put it in some lib directory in your flash project. Then import the Deferred and Promise classes like so:</p>
+
+<div class="highlight"><pre><code class="language-as3" data-lang="as3"><span class="k">import</span> <span class="nn">com.codecatalyst.promise.Deferred</span><span class="o">;</span>
+<span class="k">import</span> <span class="nn">com.codecatalyst.promise.Promise</span><span class="o">;</span></code></pre></div>
+
+<p>One thing to note about promise-as3’s implementation of promises, is that you need to instantiate a Deferred object from which you will pull a Promise object.</p>
+
+<pre><code>var deferred : Deferred = new Deferred();
+var promise : Promise = deferred.promise;
+</code></pre>
+
+<p>This is different from JS’s built-in promises, which bypass deferreds entirely.</p>
+
+<h3 id="adding-fulfill-and-reject-functions-callback-and-errback">Adding fulfill and reject functions (callback and errback)</h3>
+
+<p>In the new JS implementation of promises, the promise constructor takes a function as a parameter. That function itself takes fulfill and reject functions as arguments. In AS3, it would look something like this:</p>
+
+<pre><code>public function doSomethingAsync(url) {
+  var promise : Promise = new Promise( function (fulfill, reject) {
+    setTimeout(function () {
+      reject( new Error('Timeout' ));
+    }, 10000);
+  }
+}
+</code></pre>
+
+<p>This is NOT how it is done with the promise-as3 library.</p>
+
+<h3 id="passing-arguments">Passing Arguments</h3>
+
+
+            
+        </section>
+
+        <footer>
+            <address>
+               <img src="/images/ks.png">
+                <p>Written by <strong><a rel="author" href="https://twitter.com/" title="" target="_blank">Eric Kenney</a></strong><br>
+                <span class="muted">Web Developer</span>
+                </p>
+            </address>
+
+        </footer>
+
+        
+        <section>
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'kenneye'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+        </section>
+        
+    </div>
+</article>
+
+
+<footer class="site-footer">
+    <div class="container">
+        &copy; 2015
+
+        <nav>
+            <a href="http://www.erickenney.io/Blog">Eric Kenney</a> &middot;
+            <a href="/">Blog</a> &middot;
+            
+            <a href="https://www.erickenney.io/about/">About</a>
+        </nav>
+
+        <nav class="social">
+            
+            
+            <a href="/feed.xml" title="RSS Feed">
+                <i class="icon icon-rss black"></i>
+            </a>
+        </nav>
+        <p>Incorporated theme by <a href="https://sendtoinc.com">Inc</a></p>
+    </div>
+</footer>
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="/assets/main.js"></script>
+
+
+
+
+
+  UA-51538703-1
+
+
+
+
+
+</body>
+</html>
