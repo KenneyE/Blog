@@ -37,7 +37,7 @@ inc:
 
   # Setup your fonts, colors etc at _assets/stylesheets/main.scss
 
-url:         http://www.erickenney.io/Blog
+url:         http://www.erickenney.io
 source:      .
 destination: ./_site
 plugins:     ./_plugins
@@ -67,7 +67,7 @@ excerpt_separator: "<!-- more -->"
 safe:        false
 host:        0.0.0.0
 port:        4000
-baseurl:     /
+baseurl:     /Blog
 lsi:         false
 
 maruku:
@@ -108,7 +108,7 @@ redcloth:
 assets:
 
   dirname: assets
-  baseurl: /assets/
+  baseurl: /Blog/assets/
   sources:
     - _assets/javascripts
     - _assets/stylesheets
