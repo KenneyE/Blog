@@ -37,7 +37,7 @@ inc:
 
   # Setup your fonts, colors etc at _assets/stylesheets/main.scss
 
-url:         http://www.erickenney.io/Blog
+url:         http://www.erickenney.io
 source:      .
 destination: ./_site
 plugins:     ./_plugins
@@ -108,7 +108,7 @@ redcloth:
 assets:
 
   dirname: assets
-  baseurl: /assets/
+  baseurl: http://erickenney.io/assets/
   sources:
     - _assets/javascripts
     - _assets/stylesheets
