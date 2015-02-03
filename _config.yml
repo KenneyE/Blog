@@ -16,7 +16,7 @@ inc:
   # Comments
   disqus:
     # Eg. "exampleblog" Set to false to disable comments
-    shortname:  kenneye
+    shortname:  kenney
 
   # Sharing settings
   sharing:
