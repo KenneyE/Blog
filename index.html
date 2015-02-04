@@ -14,8 +14,17 @@ layout: base
             {% if site.inc.facebook %}
             <a href="http://facebook.com/{{ site.inc.facebook }}" title="Like on Facebook" target="_blank"><i class="icon icon-facebook"></i></a>
             {% endif %}
+
             {% if site.inc.github %}
-            <a href="http://github.com/{{ site.inc.facebook }}" title="Like on Facebook" target="_blank"><i class="icon icon-facebook"></i></a>
+            <a href="http://github.com/{{ site.inc.github }}" title="Check Out My GitHub" target="_blank">{% icon fa-github %}</a>
+            {% endif %}
+
+            {% if site.inc.stackoverflow %}
+            <a href="http://stackoverflow.com/{{ site.inc.stackoverflow }}" title="Check Out My SO" target="_blank"><i class="fa fa-stack-overflow"></i></a>
+            {% endif %}
+
+            {% if site.inc.linkedin %}
+            <a href="http://linkedin.com/{{ site.inc.linkedin }}" title="My LinkedIn" target="_blank"><i class="fa fa-linkedin"></i></a>
             {% endif %}
             <!-- <a href="/feed.xml" title="RSS Feed">
                 <i class="icon icon-rss"></i>

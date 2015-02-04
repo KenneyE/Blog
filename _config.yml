@@ -21,14 +21,17 @@ inc:
   # Sharing settings
   sharing:
     twitter:    false
-    facebook:   true
+    facebook:   false
     gplus:      false
     hn:         false
     github:     true
-    so:         true
+    stackoverflow: true
 
+  github: KenneyE
+  stackoverflow: users/3525808/kenneye
+  linkedin: in/erickenney1
 
- # Analytics
+  # Analytics
   analytics:
     google: true # Add tracking code in _includes/_google-analytics.html
 
