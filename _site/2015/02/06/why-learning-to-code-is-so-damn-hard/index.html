@@ -3,18 +3,18 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CodeCatatlyst promise-as3 Library &mdash; Kenney Monthly</title>
+    <title>Why Learning to Code is So Damn Hard &mdash; Kenney Monthly</title>
     <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="/Blog/assets/main.css">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
     <link rel="apple-touch-icon" href="/images/logo.png"/>
     <link href="/feed.xml" rel="alternate" type="application/rss+xml" title="Kenney Monthly" />
-    <meta name="title" content="CodeCatatlyst promise-as3 Library ">
+    <meta name="title" content="Why Learning to Code is So Damn Hard ">
     <link rel="canonical" href="http://www.erickenney.io/Blog//2015/02/06/why-learning-to-code-is-so-damn-hard/">
     
     
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-    <meta property="og:title" content="CodeCatatlyst promise-as3 Library "/>
+    <meta property="og:title" content="Why Learning to Code is So Damn Hard "/>
     <meta property="og:url" content="http://www.erickenney.io/Blog//2015/02/06/why-learning-to-code-is-so-damn-hard/"/>
     
     <meta property="og:image" content="http://www.erickenney.io/Blog//images/blog-cover.jpg"/>
@@ -22,8 +22,8 @@
     <meta property="og:image" content="http://www.erickenney.io/Blog//images/logo.png"/>
     
     
-    <meta property="og:description" content="A quick overview of using the CodeCatalyst promise-as3 library and all of the tips I wish I'd had when I picked it up."/>
-    <meta name="description" content="A quick overview of using the CodeCatalyst promise-as3 library and all of the tips I wish I'd had when I picked it up."/>
+    <meta property="og:description" content="This isn't actually a blog post as much as just sharing an article I liked. I think most developers, especially those that didn't take the CS degree route, can relate to this."/>
+    <meta name="description" content="This isn't actually a blog post as much as just sharing an article I liked. I think most developers, especially those that didn't take the CS degree route, can relate to this."/>
     
     <meta property="og:site_name" content="Kenney Monthly">
 </head>
@@ -58,70 +58,20 @@
                 By <address><a rel="author" href="" title="Eric Kenney" target="_blank">Eric Kenney</a></address> &mdash;
                 <time pubdate datetime="2015-06-February" title="February 06, 2015">February 06, 2015</time>
             </div>
-            <h1 class="title">CodeCatatlyst promise-as3 Library</h1>
-            <h2 class="subtitle">The tutorial I wish I'd had</h2>
+            <h1 class="title">Why Learning to Code is So Damn Hard</h1>
+            <h2 class="subtitle">Enjoy the read.</h2>
         </header>
 
         <section>
-            <h2 id="codecatalysts-promise-as3-help-i-wish-id-had">CodeCatalyst’s promise-as3 Help I Wish I’d Had</h2>
+            <h2 id="why-learning-to-code-is-so-damn-hard">Why Learning to Code is So Damn Hard</h2>
 
-<p>For a project at work recently, we found the need to adapt a promise-driven Javascript file into AS3. After a little bit of research we settled on CodeCatalyst’s promise-as3 library. I say little bit of research because there’s really not very many libraries to look into. And the ones that do exist have little to no documentation. Because of that, I decided to put together things I’ve found useful for my own and others’ benefit.</p>
+<p>This isn’t actually a blog post as much as just sharing an article I liked. I think most developers, especially those that didn’t take the CS degree route, can relate to this. Particularly that moment that you close down the Codecademy window to start your own project, and within 10 seconds realize you have no idea what the hell is going on.</p>
 
-<h3 id="starting-with-promise-as3">Starting with promise-as3</h3>
+<p>I also couldn’t agree more with the fact that no one resource is going to teach you what you need to know. Each of them has glaring holes and a different focus. Only going to be able to fill these gaps by using all of the resources, book, blogs, YouTube tutorials available.</p>
 
-<p>One thing to note about promise-as3’s implementation of promises, is that you need to instantiate a Deferred object from which you will pull a Promise object. You can not create a promise directly.</p>
+<p>Enjoy the read.</p>
 
-<div class="highlight"><pre><code class="language-as3" data-lang="as3"><span class="kd">var</span> <span class="n">deferred</span> <span class="p">:</span> <span class="kt">Deferred</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">Deferred</span><span class="o">();</span>
-<span class="kd">var</span> <span class="n">promise</span> <span class="p">:</span> <span class="kt">Promise</span> <span class="o">=</span> <span class="n">deferred</span><span class="o">.</span><span class="na">promise</span><span class="o">;</span></code></pre></div>
-
-<p>This is different from JS’s built-in promises, which bypass deferreds entirely. The reason for this separation of power is so that you are able to return the promise object and allow the promise to be passed around while maintaining control of when and how the <code>Deferred</code> is resolved/rejected. Whatever function receives the promise can add <code>then</code> and <code>otherwise</code> callbacks/errbacks and you maintain control of deferred. Which leads me to the next topic.</p>
-
-<h3 id="adding-fulfill-and-reject-functions-callback-and-errback">Adding fulfill and reject functions (callback and errback)</h3>
-
-<p>In the new JS implementation of promises, the promise constructor takes a function as a parameter. That function itself takes <code>fulfill</code> and <code>reject</code> functions as arguments. It would look something like this:</p>
-
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">doSomethingAsync</span><span class="p">(</span><span class="nx">url</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">promise</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Promise</span><span class="p">(</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">fulfill</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-          <span class="nx">reject</span><span class="p">(</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;Timeout&#39;</span> <span class="p">));</span>
-        <span class="p">},</span> <span class="mi">10000</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span></code></pre></div>
-
-<p>Here, <code>doSomethingAsync</code> creates a new promise. On construction, the promise is passed the fulfill and reject functions (defined elsewhere).</p>
-
-<p>This is not how it is done with the promise-as3 library. Instead, you instantiate a <code>Deferred</code>, passing no arguments. You extract the promise associated with the deferred. That promise can then be returned and made available to outside functions/classes (the consumer).</p>
-
-<div class="highlight"><pre><code class="language-as3" data-lang="as3"><span class="kd">public</span> <span class="kd">function </span><span class="nf">doSomethingAsync</span><span class="o">(</span><span class="err">url</span><span class="o">)</span> <span class="o">:</span> <span class="kt">Promise</span> <span class="o">{</span>
-  <span class="kd">var</span> <span class="n">deferred</span> <span class="p">:</span> <span class="kt">Deferred</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">Deferred</span><span class="o">();</span>
-  <span class="kd">var</span> <span class="n">promise</span> <span class="p">:</span> <span class="kt">Promise</span> <span class="o">=</span> <span class="n">deferred</span><span class="o">.</span><span class="na">promise</span><span class="o">;</span>
-
-  <span class="n">setTimeout</span><span class="o">(</span><span class="kd">function</span> <span class="o">()</span> <span class="o">{</span>
-            <span class="n">deferred</span><span class="o">.</span><span class="na">reject</span><span class="o">(</span><span class="s2">&quot;Of course it timed out&quot;</span><span class="o">);</span>
-        <span class="o">},</span> <span class="mi">10000</span><span class="o">);</span>
-
-    <span class="k">return</span> <span class="n">promise</span><span class="o">;</span>
-<span class="o">}</span></code></pre></div>
-
-<p>At that point, it is up to the consumer to add callbacks and errbacks.</p>
-
-<div class="highlight"><pre><code class="language-as3" data-lang="as3"><span class="n">var</span> <span class="n">myPromise</span> <span class="o">=</span> <span class="n">doSomethingAsync</span><span class="o">(</span><span class="s2">&quot;www.url.com&quot;</span><span class="o">);</span>
-
-<span class="n">myPromise</span><span class="o">.</span><span class="na">then</span><span class="o">(</span><span class="n">callback</span><span class="o">,</span> <span class="n">errback</span><span class="o">);</span> <span class="c1">// traces &quot;Of course it timed out&quot;</span>
-
-<span class="kd">public</span> <span class="kd">function </span><span class="nf">callback</span><span class="o">()</span> <span class="o">:</span> <span class="kt">void</span> <span class="o">{</span>
-  <span class="nf">trace</span><span class="o">(</span><span class="s2">&quot;That promise must have worked!&quot;</span><span class="o">)</span>
-<span class="o">}</span>
-
-<span class="kd">public</span> <span class="kd">function </span><span class="nf">errback</span><span class="o">(</span><span class="err">reason</span><span class="o">)</span> <span class="o">:</span> <span class="kt">void</span> <span class="o">{</span>
-  <span class="nf">trace</span><span class="o">(</span><span class="n">reason</span><span class="o">)</span>
-<span class="o">}</span></code></pre></div>
-
-<p>In this example, the errback will always be called because <code>doSomethingAsync</code> just waits 10 seconds and then calls <code>deferred.reject()</code>.</p>
-
-<p>I found the CodeCatalyst promise-as3 documentation a little light, especially with regards to extracting the promise from the deferred, yet still calling resolve/reject on the deferred object. The magic that passes this on to the associated promise is the <code>Resolver</code> built into the promise-as3 library. As the GitHub page notes…</p>
-
-<p>Each Deferred has an associated Resolver, and each Resolver has an associated Promise. A Deferred delegates resolve() and reject() calls to its Resolver’s resolve() and reject() methods. A Promise delegates then() calls to its Resolver’s then() method. In this way, access to Resolver operations are divided between producer (Deferred) and consumer (Promise) roles.</p>
+<p><a href="http://www.vikingcodeschool.com/posts/why-learning-to-code-is-so-damn-hard">Why Learning to Code is So Damn Hard</a></p>
 
 
             
