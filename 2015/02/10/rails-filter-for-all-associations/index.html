@@ -142,7 +142,7 @@
 <h3 id="my-original-attempts">My Original Attempts</h3>
 <p>If you’re still reading, that means you didn’t just copy and paste that last snippet of code and want to actually learn why more obvious methods might not work. That’s awesome.</p>
 
-<h5 id="first-go">First Go</h5>
+<h4 id="first-go">First Go</h4>
 <p>The move obvious and simplest attempt would be something like:</p>
 
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">filtered_hospitals</span> <span class="o">=</span> <span class="no">Hospital</span><span class="o">.</span><span class="n">joins</span><span class="p">(</span><span class="ss">:features</span><span class="p">)</span>
@@ -155,18 +155,20 @@
 
 <p>This does the exact thing I was trying to avoid, which returns any hospital that has ANY searched feature. So adding features increases your number of results rather than narrowing it down.</p>
 
-<h5 id="second-go">Second Go</h5>
+<h4 id="second-go---bad-sql">Second Go - Bad SQL</h4>
 <p>My next attempt was to work with somewhat more raw SQL. I’d build a query string to evaluate based on each feature in the <code>searched_features</code> list.</p>
 
 <div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">query_string</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;features.name = ? AND &quot;</span> <span class="o">*</span> <span class="n">searched_features</span><span class="o">.</span><span class="n">length</span><span class="p">)</span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="o">-</span><span class="mi">6</span><span class="o">]</span></code></pre></div>
 
-<p>This just repeats “features.name = ? AND” as many times as there are features, and then removes the final AND. Not the cleanest, admittedly.</p>
+<p>This just repeats “features.name = ? AND” as many times as there are features, and then removes the final AND. Not the cleanest, admittedly. Then I would run the following query:</p>
 
-<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">query_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-<span class="n">features</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span> <span class="n">feature</span> <span class="o">|</span>
-  <span class="n">query_string</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">feature</span><span class="si">}</span><span class="s2"> in features AND &quot;</span>
-<span class="k">end</span>
-<span class="n">query_string</span> <span class="o">=</span> <span class="n">query_string</span><span class="o">[</span><span class="mi">0</span><span class="o">.</span><span class="n">.</span><span class="o">-</span><span class="mi">6</span><span class="o">]</span></code></pre></div>
+<div class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="n">filtered_hospitals</span> <span class="o">=</span> <span class="no">Hospital</span><span class="o">.</span><span class="n">joins</span><span class="p">(</span><span class="ss">:features</span><span class="p">)</span>
+  <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">query_string</span><span class="p">,</span> <span class="n">searched_features</span><span class="p">)</span></code></pre></div>
+
+<p>This just doesn’t work at all. When you join the hospitals and features table, you end up with multiple rows of the same hospital. One for each associated feature. This query would look for a single row, with all of the features. That’s obviously impossible as each row for a given hospital can only have one feature. Bad attempt.</p>
+
+<h3 id="conclusion">Conclusion</h3>
+<p>This is just a query that seems like it would be very common and like Rails would have a built-in query for just this. Turns out that’s not the case and that it’s actually harder to find a clear solution than I expected. Once you see it though, it makes perfect sense and I think this will be a useful pattern to remember down the road.</p>
 
             
         </section>
