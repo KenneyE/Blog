@@ -98,7 +98,7 @@ And there you have it. `filtered_hospitals` will be only the hospitals that have
 ###My Original Attempts
 If you're still reading, that means you didn't just copy and paste that last snippet of code and want to actually learn why more obvious methods might not work. That's awesome.
 
-#####First Go
+####First Go
 The move obvious and simplest attempt would be something like:
 {% highlight ruby %}
 filtered_hospitals = Hospital.joins(:features)
@@ -111,7 +111,7 @@ filtered_hospitals = Hospital.joins(:features)
 {% endhighlight %}
 This does the exact thing I was trying to avoid, which returns any hospital that has ANY searched feature. So adding features increases your number of results rather than narrowing it down.
 
-#####Second Go - Bad SQL
+####Second Go - Bad SQL
 My next attempt was to work with somewhat more raw SQL. I'd build a query string to evaluate based on each feature in the `searched_features` list.
 
 {% highlight ruby %}
@@ -125,13 +125,5 @@ filtered_hospitals = Hospital.joins(:features)
 {% endhighlight %}
 This just doesn't work at all. When you join the hospitals and features table, you end up with multiple rows of the same hospital. One for each associated feature. This query would look for a single row, with all of the features. That's obviously impossible as each row for a given hospital can only have one feature. Bad attempt.
 
-#####Third Go - Better SQL
-My last wrong attempt used similar methods as the second, but reversing the SQL. I would build a query string that required each searched feature to be in the array of features for a given hospital.
-{% highlight ruby %}
-query_string = ""
-searched_features.each do | feature |
-  query_string << "#{feature} in features AND "
-end
-query_string = query_string[0..-6]
-{% endhighlight %}
-This just doesn't work because the `features` used in the query isn't actually a list of all of a hospital's features.
+###Conclusion
+This is just a query that seems like it would be very common and like Rails would have a built-in query for just this. Turns out that's not the case and that it's actually harder to find a clear solution than I expected. Once you see it though, it makes perfect sense and I think this will be a useful pattern to remember down the road.
