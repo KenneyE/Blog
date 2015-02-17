@@ -6,13 +6,13 @@
     <atom:link href="http://www.erickenney.io/Blog//feed.xml" rel="self" type="application/rss+xml" />
     <description></description>
     <language>en-us</language>
-    <pubDate>Tue, 17 Feb 2015 04:25:13 +0000</pubDate>
-    <lastBuildDate>Tue, 17 Feb 2015 04:25:13 +0000</lastBuildDate>
+    <pubDate>Tue, 17 Feb 2015 04:31:56 +0000</pubDate>
+    <lastBuildDate>Tue, 17 Feb 2015 04:31:56 +0000</lastBuildDate>
 
     
     
     <item>
-      <title>Rails-Find Models with ALL Associations</title>
+      <title>Finding a Rails Model That Has All Associations</title>
       <link>http://www.erickenney.io/Blog//2015/02/10/rails-filter-for-all-associations/</link>
       <pubDate>Tue, 10 Feb 2015 00:00:00 +0000</pubDate>
       <author></author>
