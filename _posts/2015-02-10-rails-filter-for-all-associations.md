@@ -1,7 +1,7 @@
 ---
 layout: post
 
-title: Rails-Find Models with ALL Associations
+title: Finding a Rails Model That Has All Associations
 subtitle: "How to filter on a Rails model where all associations exist."
 cover_image: blog-cover.jpg
 
