@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Catching in Ansible &mdash; Hey There Fancy Pants</title>
+    <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/Blog/assets/main.css">
+    <link rel="shortcut icon" href="/favicon.png" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="/images/logo.png"/>
+    <link href="/feed.xml" rel="alternate" type="application/rss+xml" title="Hey There Fancy Pants" />
+    <meta name="title" content="Error Catching in Ansible ">
+    <link rel="canonical" href="http://www.erickenney.io/Blog//2015/02/20/handling-ansible-errors/">
+    
+    
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <meta property="og:title" content="Error Catching in Ansible "/>
+    <meta property="og:url" content="http://www.erickenney.io/Blog//2015/02/20/handling-ansible-errors/"/>
+    
+    <meta property="og:image" content="http://www.erickenney.io/Blog//images/blog-cover.jpg"/>
+    
+    <meta property="og:image" content="http://www.erickenney.io/Blog//images/logo.png"/>
+    
+    
+    <meta property="og:description" content="So what if you want to write an Ansible script that requires you to shut down Apache at the beginning, run the rest of your commands and then restart Apache at the end and one of your commands fails in the middle? This leaves you with your a failed script and Apache still stopped."/>
+    <meta name="description" content="So what if you want to write an Ansible script that requires you to shut down Apache at the beginning, run the rest of your commands and then restart Apache at the end and one of your commands fails in the middle? This leaves you with your a failed script and Apache still stopped."/>
+    
+    <meta property="og:site_name" content="Hey There Fancy Pants">
+</head>
+<body>
+
+<section class="site-nav">
+    <header>
+        <nav id="navigation">
+            <a class="brand" href="/">
+                <img src="http://www.erickenney.io/Blog//images/logo.png" alt="Inc">
+            </a>
+            <a href="http://www.erickenney.io/Blog/" class="home">Blog</a>
+            
+
+        </nav>
+        
+    </header>
+</section>
+
+
+<div class="article-cover">
+    <div>
+        <img src="/Blog/images/blog-cover.jpg" class="image">
+    </div>
+</div>
+
+<article>
+
+    <div class="container">
+        <header>
+            <div class="meta">
+                By <address><a rel="author" href="" title="Eric Kenney" target="_blank">Eric Kenney</a></address> &mdash;
+                <time pubdate datetime="2015-20-February" title="February 20, 2015">February 20, 2015</time>
+            </div>
+            <h1 class="title">Error Catching in Ansible</h1>
+            <h2 class="subtitle">How to emulate a try-catch in Ansible tasks</h2>
+        </header>
+
+        <section>
+            <h2 id="error-catching-in-ansible">Error Catching in Ansible</h2>
+<p>###The Problem
+So what if you want to write an Ansible script that requires you to shut down Apache at the beginning, run the rest of your commands and then restart Apache at the end and one of your commands fails in the middle? This leaves you with your a failed script and Apache still stopped.</p>
+
+<p>This is a problem if you are trying to quickly make an update and can’t be taking down a server indefinitely upon failure. The problem is that Ansible doesn’t support an explicit form of try/catch. It only supports the “try” part. So we work with it.</p>
+
+<h3 id="the-solution">The Solution</h3>
+<p>To fix the problem I had to use <code>ignore_errors</code>. So I want to shut down Apache, run some Yum commands, and then regardless of the results, restart Apache. I begin by simply shutting down Apache. The next command in my case is to run <code>yum clean all</code>. This is the first place that failure is possible. So I register the result as the <code>clean_result</code> variable. This includes the output from running the command, including a boolean regarding whether or not it failed. And finally you want to ignore any errors with <code>ignore_errors: True</code>.</p>
+
+<p>So far you’ve got:</p>
+
+<hr />
+<ul>
+  <li>hosts: ‘’
+sudo: yes
+tasks:
+    <ul>
+      <li>name: shut down apache
+service: name=apache state=stopped</li>
+      <li>name: clean all packages
+shell: yum clean all
+register: clean_result
+ignore_errors: True</li>
+    </ul>
+  </li>
+</ul>
+
+<p>All’s fine and dandy, but what happens if that actually fails? You don’t want to go running <code>yum update</code> all willy nilly if cleaning failed. So you need to add a conditional to that command. So you add the line <code>when: clean_result | success</code>. This checks the boolean <code>clean_result.success</code> that was registered in the <code>clean all packages</code> task. You could do the opposite with <code>clean_result | failed</code>. Since you want to start Apache back up regardless of whether or not the packages update, make sure to ignore errors again.</p>
+
+<p>If you wanted more tasks between updating packages and restarting Apache, you’d also need to register an <code>update_result</code> variable so you can check for success. Here we don’t need it since we’re jumping straight to restarting Apache.</p>
+
+<p>Now you’ve got:</p>
+
+<hr />
+<ul>
+  <li>hosts: ‘’
+sudo: yes
+tasks:
+    <ul>
+      <li>name: shut down apache
+service: name=apache state=stopped</li>
+      <li>name: clean all packages
+shell: yum clean all
+register: clean_result
+ignore_errors: True</li>
+      <li>name: update package 
+yum: state=latest name=
+ignore_errors: True
+when: clean_result | success</li>
+      <li>name: start apache
+service: name=apache state=started
+when: apache_restart | bool</li>
+    </ul>
+  </li>
+</ul>
+
+<p>And that’s it.</p>
+
+<h3 id="the-downsides">The Downsides</h3>
+<p>####No Counted Failures
+There is one major downside to this method. You will never have any failures in your results.  It’ll pretty much always look like this:</p>
+
+<p>ok=4   changed=2    unreachable=0    failed=0</p>
+
+<p>Each individual task will still print a failure, but if someone unfamiliar with your script were to see the results, they would never know it broke. That task failure will look like this:</p>
+
+<p>TASK: [update package]
+<strong>**</strong><strong>**</strong><strong>**</strong><strong>**</strong><strong>**</strong>***
+failed: [hostname] =&gt; {“changed”: false, “failed”: true, “rc”: 0, “results”: []}
+msg: No Package matching ‘<package-name>' found available, installed or updated</package-name></p>
+
+<h4 id="what-if-theres-lots-of-tasks">What If There’s Lots of Tasks?</h4>
+<p>This is clearly just a pain if you have a ton of tasks. It could be simplified by naming all of the registered variables the same thing. Instead of calling it <code>clean_result</code>, just call it <code>result</code>. Then you can copy and paste the same <code>register</code> and <code>when</code> into each task. <code>result</code> will be re-written each time with the newest results. It’s not perfect but is manageable.</p>
+
+<h3 id="conclusion">Conclusion</h3>
+<p>This is an imperfect solution to a shortcoming of Ansible as it exists now. Sometimes it’s just necessary to keep a server running or to do any other clean up task. Please comment if anyone finds a more ideal solution, as I would love to know it.</p>
+
+
+            
+        </section>
+
+        <footer>
+            <address>
+               <img src="/Blog/images/logo.png">
+                <p>Written by <strong><a rel="author" href="https://twitter.com/" title="" target="_blank">Eric Kenney</a></strong><br>
+                <span class="muted">Web Developer</span>
+                </p>
+            </address>
+
+        </footer>
+
+        
+        <section>
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'kenney'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+        </section>
+        
+    </div>
+</article>
+
+
+<footer class="site-footer">
+    <div class="container">
+        &copy; 2015
+
+        <nav>
+            <a href="http://www.erickenney.io">Eric Kenney</a> &middot;
+            <a href="http://www.erickenney.io/Blog/">Blog</a> &middot;
+            <a href="http://www.erickenney.io/#main">About</a>
+        </nav>
+
+        <nav class="social">
+            
+            
+            <!-- <a href="/feed.xml" title="RSS Feed">
+                <i class="icon icon-rss black"></i>
+            </a> -->
+        </nav>
+        <p>Incorporated theme by <a href="https://sendtoinc.com">Inc</a></p>
+    </div>
+</footer>
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="/Blog/assets/main.js"></script>
+
+
+
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-51538703-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>
