@@ -6,8 +6,8 @@
     <atom:link href="http://www.erickenney.io/Blog//feed.xml" rel="self" type="application/rss+xml" />
     <description></description>
     <language>en-us</language>
-    <pubDate>Fri, 20 Feb 2015 22:35:08 +0000</pubDate>
-    <lastBuildDate>Fri, 20 Feb 2015 22:35:08 +0000</lastBuildDate>
+    <pubDate>Sun, 22 Feb 2015 23:38:02 +0000</pubDate>
+    <lastBuildDate>Sun, 22 Feb 2015 23:38:02 +0000</lastBuildDate>
 
     
     
@@ -18,8 +18,10 @@
       <author></author>
       <guid>http://www.erickenney.io/Blog//2015/02/20/handling-ansible-errors</guid>
       <description>&lt;h2 id=&quot;error-catching-in-ansible&quot;&gt;Error Catching in Ansible&lt;/h2&gt;
-&lt;p&gt;###The Problem
-So what if you want to write an Ansible script that requires you to shut down Apache at the beginning, run the rest of your commands and then restart Apache at the end and one of your commands fails in the middle? This leaves you with your a failed script and Apache still stopped.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-problem&quot;&gt;The Problem&lt;/h3&gt;
+
+&lt;p&gt;So what if you want to write an Ansible script that requires you to shut down Apache at the beginning, run the rest of your commands and then restart Apache at the end and one of your commands fails in the middle? This leaves you with your a failed script and Apache still stopped.&lt;/p&gt;
 
 &lt;p&gt;This is a problem if you are trying to quickly make an update and can’t be taking down a server indefinitely upon failure. The problem is that Ansible doesn’t support an explicit form of try/catch. It only supports the “try” part. So we work with it.&lt;/p&gt;
 
@@ -28,21 +30,16 @@ So what if you want to write an Ansible script that requires you to shut down Ap
 
 &lt;p&gt;So far you’ve got:&lt;/p&gt;
 
-&lt;hr /&gt;
-&lt;ul&gt;
-  &lt;li&gt;hosts: ‘’
-sudo: yes
-tasks:
-    &lt;ul&gt;
-      &lt;li&gt;name: shut down apache
-service: name=apache state=stopped&lt;/li&gt;
-      &lt;li&gt;name: clean all packages
-shell: yum clean all
-register: clean_result
-ignore_errors: True&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span class=&quot;nn&quot;&gt;---&lt;/span&gt;
+&lt;span class=&quot;p-Indicator&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;hosts&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;&amp;lt;hosts_names&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;l-Scalar-Plain&quot;&gt;sudo&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;yes&lt;/span&gt;
+  &lt;span class=&quot;l-Scalar-Plain&quot;&gt;tasks&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt;
+   &lt;span class=&quot;p-Indicator&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;shut down apache&lt;/span&gt;
+     &lt;span class=&quot;l-Scalar-Plain&quot;&gt;service&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;name=apache state=stopped&lt;/span&gt;
+   &lt;span class=&quot;p-Indicator&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;clean all packages&lt;/span&gt;
+     &lt;span class=&quot;l-Scalar-Plain&quot;&gt;shell&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;yum clean all&lt;/span&gt;
+     &lt;span class=&quot;l-Scalar-Plain&quot;&gt;register&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;clean_result&lt;/span&gt;
+     &lt;span class=&quot;l-Scalar-Plain&quot;&gt;ignore_errors&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;True&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;All’s fine and dandy, but what happens if that actually fails? You don’t want to go running &lt;code&gt;yum update&lt;/code&gt; all willy nilly if cleaning failed. So you need to add a conditional to that command. So you add the line &lt;code&gt;when: clean_result | success&lt;/code&gt;. This checks the boolean &lt;code&gt;clean_result.success&lt;/code&gt; that was registered in the &lt;code&gt;clean all packages&lt;/code&gt; task. You could do the opposite with &lt;code&gt;clean_result | failed&lt;/code&gt;. Since you want to start Apache back up regardless of whether or not the packages update, make sure to ignore errors again.&lt;/p&gt;
 
@@ -50,43 +47,39 @@ ignore_errors: True&lt;/li&gt;
 
 &lt;p&gt;Now you’ve got:&lt;/p&gt;
 
-&lt;hr /&gt;
-&lt;ul&gt;
-  &lt;li&gt;hosts: ‘’
-sudo: yes
-tasks:
-    &lt;ul&gt;
-      &lt;li&gt;name: shut down apache
-service: name=apache state=stopped&lt;/li&gt;
-      &lt;li&gt;name: clean all packages
-shell: yum clean all
-register: clean_result
-ignore_errors: True&lt;/li&gt;
-      &lt;li&gt;name: update package 
-yum: state=latest name=
-ignore_errors: True
-when: clean_result | success&lt;/li&gt;
-      &lt;li&gt;name: start apache
-service: name=apache state=started
-when: apache_restart | bool&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span class=&quot;nn&quot;&gt;---&lt;/span&gt;
+&lt;span class=&quot;p-Indicator&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;hosts&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;&amp;lt;hosts_names&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;l-Scalar-Plain&quot;&gt;sudo&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;yes&lt;/span&gt;
+  &lt;span class=&quot;l-Scalar-Plain&quot;&gt;tasks&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt;
+   &lt;span class=&quot;p-Indicator&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;shut down apache&lt;/span&gt;
+     &lt;span class=&quot;l-Scalar-Plain&quot;&gt;service&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;name=apache state=stopped&lt;/span&gt;
+   &lt;span class=&quot;p-Indicator&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;clean all packages&lt;/span&gt;
+     &lt;span class=&quot;l-Scalar-Plain&quot;&gt;shell&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;yum clean all&lt;/span&gt;
+     &lt;span class=&quot;l-Scalar-Plain&quot;&gt;register&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;clean_result&lt;/span&gt;
+     &lt;span class=&quot;l-Scalar-Plain&quot;&gt;ignore_errors&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;True&lt;/span&gt;
+   &lt;span class=&quot;p-Indicator&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;update package&lt;/span&gt; 
+     &lt;span class=&quot;l-Scalar-Plain&quot;&gt;yum&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;state=latest name=&lt;/span&gt;
+     &lt;span class=&quot;l-Scalar-Plain&quot;&gt;ignore_errors&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;True&lt;/span&gt;
+     &lt;span class=&quot;l-Scalar-Plain&quot;&gt;when&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;clean_result | success&lt;/span&gt;
+   &lt;span class=&quot;p-Indicator&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;start apache&lt;/span&gt;
+     &lt;span class=&quot;l-Scalar-Plain&quot;&gt;service&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;name=apache state=started&lt;/span&gt;
+     &lt;span class=&quot;l-Scalar-Plain&quot;&gt;when&lt;/span&gt;&lt;span class=&quot;p-Indicator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;l-Scalar-Plain&quot;&gt;apache_restart | bool&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;And that’s it.&lt;/p&gt;
 
 &lt;h3 id=&quot;the-downsides&quot;&gt;The Downsides&lt;/h3&gt;
-&lt;p&gt;####No Counted Failures
-There is one major downside to this method. You will never have any failures in your results.  It’ll pretty much always look like this:&lt;/p&gt;
 
-&lt;p&gt;ok=4   changed=2    unreachable=0    failed=0&lt;/p&gt;
+&lt;h4 id=&quot;no-counted-failures&quot;&gt;No Counted Failures&lt;/h4&gt;
+&lt;p&gt;There is one major downside to this method. You will never have any failures in your results.  It’ll pretty much always look like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;ok=4   changed=2    unreachable=0    failed=0&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Each individual task will still print a failure, but if someone unfamiliar with your script were to see the results, they would never know it broke. That task failure will look like this:&lt;/p&gt;
 
-&lt;p&gt;TASK: [update package]
-&lt;strong&gt;**&lt;/strong&gt;&lt;strong&gt;**&lt;/strong&gt;&lt;strong&gt;**&lt;/strong&gt;&lt;strong&gt;**&lt;/strong&gt;&lt;strong&gt;**&lt;/strong&gt;***
-failed: [hostname] =&amp;gt; {“changed”: false, “failed”: true, “rc”: 0, “results”: []}
-msg: No Package matching ‘&lt;package-name&gt;&#39; found available, installed or updated&lt;/package-name&gt;&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;TASK: [update package]
+*********************************
+failed: [hostname] =&amp;gt; {&amp;quot;changed&amp;quot;: false, &amp;quot;failed&amp;quot;: true, &amp;quot;rc&amp;quot;: 0, &amp;quot;results&amp;quot;: []}
+msg: No Package matching &amp;#39;&amp;lt;package-name&amp;gt;&amp;#39; found available, installed or updated&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h4 id=&quot;what-if-theres-lots-of-tasks&quot;&gt;What If There’s Lots of Tasks?&lt;/h4&gt;
 &lt;p&gt;This is clearly just a pain if you have a ton of tasks. It could be simplified by naming all of the registered variables the same thing. Instead of calling it &lt;code&gt;clean_result&lt;/code&gt;, just call it &lt;code&gt;result&lt;/code&gt;. Then you can copy and paste the same &lt;code&gt;register&lt;/code&gt; and &lt;code&gt;when&lt;/code&gt; into each task. &lt;code&gt;result&lt;/code&gt; will be re-written each time with the newest results. It’s not perfect but is manageable.&lt;/p&gt;

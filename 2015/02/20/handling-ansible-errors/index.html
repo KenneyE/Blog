@@ -64,8 +64,10 @@
 
         <section>
             <h2 id="error-catching-in-ansible">Error Catching in Ansible</h2>
-<p>###The Problem
-So what if you want to write an Ansible script that requires you to shut down Apache at the beginning, run the rest of your commands and then restart Apache at the end and one of your commands fails in the middle? This leaves you with your a failed script and Apache still stopped.</p>
+
+<h3 id="the-problem">The Problem</h3>
+
+<p>So what if you want to write an Ansible script that requires you to shut down Apache at the beginning, run the rest of your commands and then restart Apache at the end and one of your commands fails in the middle? This leaves you with your a failed script and Apache still stopped.</p>
 
 <p>This is a problem if you are trying to quickly make an update and can’t be taking down a server indefinitely upon failure. The problem is that Ansible doesn’t support an explicit form of try/catch. It only supports the “try” part. So we work with it.</p>
 
@@ -74,21 +76,16 @@ So what if you want to write an Ansible script that requires you to shut down Ap
 
 <p>So far you’ve got:</p>
 
-<hr />
-<ul>
-  <li>hosts: ‘’
-sudo: yes
-tasks:
-    <ul>
-      <li>name: shut down apache
-service: name=apache state=stopped</li>
-      <li>name: clean all packages
-shell: yum clean all
-register: clean_result
-ignore_errors: True</li>
-    </ul>
-  </li>
-</ul>
+<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="nn">---</span>
+<span class="p-Indicator">-</span> <span class="l-Scalar-Plain">hosts</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">&lt;hosts_names&gt;</span>
+  <span class="l-Scalar-Plain">sudo</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">yes</span>
+  <span class="l-Scalar-Plain">tasks</span><span class="p-Indicator">:</span>
+   <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">shut down apache</span>
+     <span class="l-Scalar-Plain">service</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">name=apache state=stopped</span>
+   <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">clean all packages</span>
+     <span class="l-Scalar-Plain">shell</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">yum clean all</span>
+     <span class="l-Scalar-Plain">register</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">clean_result</span>
+     <span class="l-Scalar-Plain">ignore_errors</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">True</span></code></pre></div>
 
 <p>All’s fine and dandy, but what happens if that actually fails? You don’t want to go running <code>yum update</code> all willy nilly if cleaning failed. So you need to add a conditional to that command. So you add the line <code>when: clean_result | success</code>. This checks the boolean <code>clean_result.success</code> that was registered in the <code>clean all packages</code> task. You could do the opposite with <code>clean_result | failed</code>. Since you want to start Apache back up regardless of whether or not the packages update, make sure to ignore errors again.</p>
 
@@ -96,43 +93,39 @@ ignore_errors: True</li>
 
 <p>Now you’ve got:</p>
 
-<hr />
-<ul>
-  <li>hosts: ‘’
-sudo: yes
-tasks:
-    <ul>
-      <li>name: shut down apache
-service: name=apache state=stopped</li>
-      <li>name: clean all packages
-shell: yum clean all
-register: clean_result
-ignore_errors: True</li>
-      <li>name: update package 
-yum: state=latest name=
-ignore_errors: True
-when: clean_result | success</li>
-      <li>name: start apache
-service: name=apache state=started
-when: apache_restart | bool</li>
-    </ul>
-  </li>
-</ul>
+<div class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="nn">---</span>
+<span class="p-Indicator">-</span> <span class="l-Scalar-Plain">hosts</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">&lt;hosts_names&gt;</span>
+  <span class="l-Scalar-Plain">sudo</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">yes</span>
+  <span class="l-Scalar-Plain">tasks</span><span class="p-Indicator">:</span>
+   <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">shut down apache</span>
+     <span class="l-Scalar-Plain">service</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">name=apache state=stopped</span>
+   <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">clean all packages</span>
+     <span class="l-Scalar-Plain">shell</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">yum clean all</span>
+     <span class="l-Scalar-Plain">register</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">clean_result</span>
+     <span class="l-Scalar-Plain">ignore_errors</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">True</span>
+   <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">update package</span> 
+     <span class="l-Scalar-Plain">yum</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">state=latest name=</span>
+     <span class="l-Scalar-Plain">ignore_errors</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">True</span>
+     <span class="l-Scalar-Plain">when</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">clean_result | success</span>
+   <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">start apache</span>
+     <span class="l-Scalar-Plain">service</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">name=apache state=started</span>
+     <span class="l-Scalar-Plain">when</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">apache_restart | bool</span></code></pre></div>
 
 <p>And that’s it.</p>
 
 <h3 id="the-downsides">The Downsides</h3>
-<p>####No Counted Failures
-There is one major downside to this method. You will never have any failures in your results.  It’ll pretty much always look like this:</p>
 
-<p>ok=4   changed=2    unreachable=0    failed=0</p>
+<h4 id="no-counted-failures">No Counted Failures</h4>
+<p>There is one major downside to this method. You will never have any failures in your results.  It’ll pretty much always look like this:</p>
+
+<div class="highlight"><pre><code class="language-text" data-lang="text">ok=4   changed=2    unreachable=0    failed=0</code></pre></div>
 
 <p>Each individual task will still print a failure, but if someone unfamiliar with your script were to see the results, they would never know it broke. That task failure will look like this:</p>
 
-<p>TASK: [update package]
-<strong>**</strong><strong>**</strong><strong>**</strong><strong>**</strong><strong>**</strong>***
-failed: [hostname] =&gt; {“changed”: false, “failed”: true, “rc”: 0, “results”: []}
-msg: No Package matching ‘<package-name>' found available, installed or updated</package-name></p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">TASK: [update package]
+*********************************
+failed: [hostname] =&gt; {&quot;changed&quot;: false, &quot;failed&quot;: true, &quot;rc&quot;: 0, &quot;results&quot;: []}
+msg: No Package matching &#39;&lt;package-name&gt;&#39; found available, installed or updated</code></pre></div>
 
 <h4 id="what-if-theres-lots-of-tasks">What If There’s Lots of Tasks?</h4>
 <p>This is clearly just a pain if you have a ton of tasks. It could be simplified by naming all of the registered variables the same thing. Instead of calling it <code>clean_result</code>, just call it <code>result</code>. Then you can copy and paste the same <code>register</code> and <code>when</code> into each task. <code>result</code> will be re-written each time with the newest results. It’s not perfect but is manageable.</p>
