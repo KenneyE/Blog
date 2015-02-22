@@ -14,7 +14,9 @@ author:
 ---
 
 ##Error Catching in Ansible
+
 ###The Problem
+
 So what if you want to write an Ansible script that requires you to shut down Apache at the beginning, run the rest of your commands and then restart Apache at the end and one of your commands fails in the middle? This leaves you with your a failed script and Apache still stopped.
 
 This is a problem if you are trying to quickly make an update and can't be taking down a server indefinitely upon failure. The problem is that Ansible doesn't support an explicit form of try/catch. It only supports the "try" part. So we work with it.
@@ -24,9 +26,9 @@ To fix the problem I had to use `ignore_errors`. So I want to shut down Apache, 
 
 So far you've got:
 
-{{ highlight yaml }}
+{% highlight yaml %}
 ---
-- hosts: '{{ hosts }}'
+- hosts: <hosts_names>
   sudo: yes
   tasks:
    - name: shut down apache
@@ -35,15 +37,17 @@ So far you've got:
      shell: yum clean all
      register: clean_result
      ignore_errors: True
-{{ endhighlight }}
+{% endhighlight %}
+
 All's fine and dandy, but what happens if that actually fails? You don't want to go running `yum update` all willy nilly if cleaning failed. So you need to add a conditional to that command. So you add the line `when: clean_result | success`. This checks the boolean `clean_result.success` that was registered in the `clean all packages` task. You could do the opposite with `clean_result | failed`. Since you want to start Apache back up regardless of whether or not the packages update, make sure to ignore errors again.
 
 If you wanted more tasks between updating packages and restarting Apache, you'd also need to register an `update_result` variable so you can check for success. Here we don't need it since we're jumping straight to restarting Apache.
 
 Now you've got:
-{{ hightlight yaml }}
+
+{% highlight yaml %}
 ---
-- hosts: '{{ hosts }}'
+- hosts: <hosts_names>
   sudo: yes
   tasks:
    - name: shut down apache
@@ -59,23 +63,28 @@ Now you've got:
    - name: start apache
      service: name=apache state=started
      when: apache_restart | bool
-{{ endhighlight }}
+{% endhighlight %}
 
 And that's it.
 
 ### The Downsides
+
 ####No Counted Failures
 There is one major downside to this method. You will never have any failures in your results.  It'll pretty much always look like this:
-{{ highlight }}
+
+{% highlight text %}
 ok=4   changed=2    unreachable=0    failed=0
-{{ endhighlight }}
+{% endhighlight %}
+
 Each individual task will still print a failure, but if someone unfamiliar with your script were to see the results, they would never know it broke. That task failure will look like this:
-{{ highlight }}
+
+{% highlight text %}
 TASK: [update package]
 *********************************
 failed: [hostname] => {"changed": false, "failed": true, "rc": 0, "results": []}
 msg: No Package matching '<package-name>' found available, installed or updated
-{{ endhighlight }}
+{% endhighlight %}
+
 ####What If There's Lots of Tasks?
 This is clearly just a pain if you have a ton of tasks. It could be simplified by naming all of the registered variables the same thing. Instead of calling it `clean_result`, just call it `result`. Then you can copy and paste the same `register` and `when` into each task. `result` will be re-written each time with the newest results. It's not perfect but is manageable.
 
