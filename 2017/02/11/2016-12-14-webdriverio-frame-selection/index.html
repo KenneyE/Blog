@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebdriverIO - Testing Pages With Multiple/Nested IFrames &mdash; Hey There Fancy Pants</title>
+    <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/Blog/assets/main.css">
+    <link rel="shortcut icon" href="/favicon.png" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="/images/logo.png"/>
+    <link href="/feed.xml" rel="alternate" type="application/rss+xml" title="Hey There Fancy Pants" />
+    <meta name="title" content="WebdriverIO - Testing Pages With Multiple/Nested IFrames ">
+    <link rel="canonical" href="http://www.erickenney.io/Blog//2017/02/11/2016-12-14-webdriverio-frame-selection/">
+    
+    
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <meta property="og:title" content="WebdriverIO - Testing Pages With Multiple/Nested IFrames "/>
+    <meta property="og:url" content="http://www.erickenney.io/Blog//2017/02/11/2016-12-14-webdriverio-frame-selection/"/>
+    
+    <meta property="og:image" content="http://www.erickenney.io/Blog//images/blog-cover.jpg"/>
+    
+    <meta property="og:image" content="http://www.erickenney.io/Blog//images/logo.png"/>
+    
+    
+    <meta property="og:description" content="WebdriverIO is an incredible tool that allows for Selenium Webdriver testing using Javascript. This makes writing tests feel much more familiar to many of the people that this tool is intended for - web developers. And unfortunately, WebdriverIO doesn't always play well with another common item in web developement - the IFrame. Similar to JavaScript, WebdriverIO queries/commands are limited in scope to the current frame, so here are some methods we've come up with for improving cooperation between WebdriverIO and IFrames."/>
+    <meta name="description" content="WebdriverIO is an incredible tool that allows for Selenium Webdriver testing using Javascript. This makes writing tests feel much more familiar to many of the people that this tool is intended for - web developers. And unfortunately, WebdriverIO doesn't always play well with another common item in web developement - the IFrame. Similar to JavaScript, WebdriverIO queries/commands are limited in scope to the current frame, so here are some methods we've come up with for improving cooperation between WebdriverIO and IFrames."/>
+    
+    <meta property="og:site_name" content="Hey There Fancy Pants">
+</head>
+<body>
+
+<section class="site-nav">
+    <header>
+        <nav id="navigation">
+            <a class="brand" href="/">
+                <img src="http://www.erickenney.io/Blog//images/logo.png" alt="Inc">
+            </a>
+            <a href="http://www.erickenney.io/Blog/" class="home">Blog</a>
+            
+
+        </nav>
+        
+    </header>
+</section>
+
+
+<div class="article-cover">
+    <div>
+        <img src="/Blog/images/blog-cover.jpg" class="image">
+    </div>
+</div>
+
+<article>
+
+    <div class="container">
+        <header>
+            <div class="meta">
+                By <address><a rel="author" href="" title="Eric Kenney" target="_blank">Eric Kenney</a></address> &mdash;
+                <time pubdate datetime="2017-11-February" title="February 11, 2017">February 11, 2017</time>
+            </div>
+            <h1 class="title">WebdriverIO - Testing Pages With Multiple/Nested IFrames</h1>
+            <h2 class="subtitle">WebdriverIO queries/commands are limited to the scope of their frame. I'll discuss options for managing a page with multiple/nested frames.</h2>
+        </header>
+
+        <section>
+            <h1 id="webdriverio---testing-pages-with-multiplenested-iframes">WebdriverIO - Testing Pages With Multiple/Nested IFrames</h1>
+
+<p>WebdriverIO is an incredible tool that allows for Selenium Webdriver testing using Javascript. This makes writing tests feel much more familiar to many of the people that this tool is intended for - web developers. And unfortunately, WebdriverIO doesn’t always play well with another common item in web developement - the IFrame. Similar to JavaScript, WebdriverIO queries/commands are limited in scope to the current frame, so here are some methods we’ve come up with for improving cooperation between WebdriverIO and IFrames.</p>
+
+<h2 id="hostile-frames">Hostile Frames</h2>
+
+<p>First off</p>
+
+            
+        </section>
+
+        <footer>
+            <address>
+               <img src="/Blog/images/logo.png">
+                <p>Written by <strong><a rel="author" href="https://twitter.com/" title="" target="_blank">Eric Kenney</a></strong><br>
+                <span class="muted">Web Developer</span>
+                </p>
+            </address>
+
+        </footer>
+
+        
+        <section>
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'kenney'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+        </section>
+        
+    </div>
+</article>
+
+
+<footer class="site-footer">
+    <div class="container">
+        &copy; 2017
+
+        <nav>
+            <a href="http://www.erickenney.io">Eric Kenney</a> &middot;
+            <a href="http://www.erickenney.io/Blog/">Blog</a> &middot;
+            <a href="http://www.erickenney.io/#main">About</a>
+        </nav>
+
+        <nav class="social">
+            
+            
+            <!-- <a href="/feed.xml" title="RSS Feed">
+                <i class="icon icon-rss black"></i>
+            </a> -->
+        </nav>
+        <p>Incorporated theme by <a href="https://sendtoinc.com">Inc</a></p>
+    </div>
+</footer>
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="/Blog/assets/main.js"></script>
+
+
+
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-51538703-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>
