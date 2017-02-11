@@ -3,27 +3,27 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Why Learning to Code is So Damn Hard &mdash; Hey There Fancy Pants</title>
+    <title>WebdriverIO - Modularizing Test Specs for Reusability &mdash; Hey There Fancy Pants</title>
     <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="/Blog/assets/main.css">
     <link rel="shortcut icon" href="/favicon.png" type="image/x-icon" />
     <link rel="apple-touch-icon" href="/images/logo.png"/>
     <link href="/feed.xml" rel="alternate" type="application/rss+xml" title="Hey There Fancy Pants" />
-    <meta name="title" content="Why Learning to Code is So Damn Hard ">
-    <link rel="canonical" href="http://www.erickenney.io/Blog//2015/02/06/why-learning-to-code-is-so-damn-hard/">
+    <meta name="title" content="WebdriverIO - Modularizing Test Specs for Reusability ">
+    <link rel="canonical" href="http://www.erickenney.io/Blog//2017/02/11/2016-12-15-webdriverio-spec-modularization/">
     
     
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-    <meta property="og:title" content="Why Learning to Code is So Damn Hard "/>
-    <meta property="og:url" content="http://www.erickenney.io/Blog//2015/02/06/why-learning-to-code-is-so-damn-hard/"/>
+    <meta property="og:title" content="WebdriverIO - Modularizing Test Specs for Reusability "/>
+    <meta property="og:url" content="http://www.erickenney.io/Blog//2017/02/11/2016-12-15-webdriverio-spec-modularization/"/>
     
     <meta property="og:image" content="http://www.erickenney.io/Blog//images/blog-cover.jpg"/>
     
     <meta property="og:image" content="http://www.erickenney.io/Blog//images/logo.png"/>
     
     
-    <meta property="og:description" content="This isn't actually a blog post as much as just sharing an article I liked. I think most developers, especially those that didn't take the CS degree route, can relate to this."/>
-    <meta name="description" content="This isn't actually a blog post as much as just sharing an article I liked. I think most developers, especially those that didn't take the CS degree route, can relate to this."/>
+    <meta property="og:description" content=""/>
+    <meta name="description" content=""/>
     
     <meta property="og:site_name" content="Hey There Fancy Pants">
 </head>
@@ -56,23 +56,49 @@
         <header>
             <div class="meta">
                 By <address><a rel="author" href="" title="Eric Kenney" target="_blank">Eric Kenney</a></address> &mdash;
-                <time pubdate datetime="2015-06-February" title="February 06, 2015">February 06, 2015</time>
+                <time pubdate datetime="2017-11-February" title="February 11, 2017">February 11, 2017</time>
             </div>
-            <h1 class="title">Why Learning to Code is So Damn Hard</h1>
-            <h2 class="subtitle">Enjoy the read.</h2>
+            <h1 class="title">WebdriverIO - Modularizing Test Specs for Reusability</h1>
+            <h2 class="subtitle">Methods for Increasing the Reusability of Specs and Page Objects</h2>
         </header>
 
         <section>
-            <h2 id="why-learning-to-code-is-so-damn-hard">Why Learning to Code is So Damn Hard</h2>
+            <h1 id="webdriverio---modularizing-test-specs-for-reusability">WebdriverIO - Modularizing Test Specs for Reusability</h1>
 
-<p>This isn’t actually a blog post as much as just sharing an article I liked. I think most developers, especially those that didn’t take the CS degree route, can relate to this. Particularly that moment that you close down the Codecademy window to start your own project, and within 10 seconds realize you have no idea what the hell is going on.</p>
+<p>At work, we have a whole lot of test cases. If you were to try to test every combination of options across every device and browser, you’d be looking at tens of thousands of individual tests. In an attempt to make this less painful, we’ve been moving towards automation using WebdriverIO and BrowserStack. When designing our test framework, we had a few basic requirements:
+- Specs should be agnostic to the page they are testing
+- Specs should be reusable across test cases
+- The suite should accept an array of test inputs over which it can iterate. This allows for one test suite to be reusable for all of our test input combinations.
+- The <a href="http://martinfowler.com/bliki/PageObject.html">page object</a> should be the only thing that needs changing when testing a new product.</p>
 
-<p>I also couldn’t agree more with the fact that no one resource is going to teach you what you need to know. Each of them has glaring holes and a different focus. Only going to be able to fill these gaps by using all of the resources, book, blogs, YouTube tutorials available.</p>
+<p>In order to meet these goals, we ended up sort of crafting a new framework with a clear file structure and easy re-use of specs and assertions across test cases. So let’s take a look…</p>
 
-<p>Enjoy the read.</p>
+<blockquote>
+  <p>Note: Most of our testing is based around video ad playback. This includes playing, pausing, click-thru, etc. This framework is especially conducive to that sort of feature testing, but could easily be expanded to any WebdriverIO use case.</p>
+</blockquote>
 
-<p><a href="http://www.vikingcodeschool.com/posts/why-learning-to-code-is-so-damn-hard">Why Learning to Code is So Damn Hard</a></p>
+<h2 id="basics">Basics</h2>
 
+<p>First I’ll explain the directory structure used and then go into what each portion does. The basic structure looks like this:</p>
+
+<p><code>
+Project
+│   README.md
+│   file001.txt    
+│
+└───assertions
+│   │   file011.txt
+│   │   file012.txt
+│   │
+│   └───subfolder1
+│       │   file111.txt
+│       │   file112.txt
+│       │   ...
+│   
+└───bundles
+    │   file021.txt
+    │   file022.txt
+</code></p>
 
             
         </section>
